@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" data-framework="backbonejs">
+	<head>
+		<meta charset="utf-8">
+		<title>Backbone.js • Book Store</title>
+		<link rel="stylesheet" href="node_modules/todomvc-common/base.css">
+		<link rel="stylesheet" href="styles/main.css">
+	</head>
+	<body>
+		<section class="bookstore-app">
+			<header class="header">
+				<h1>Book Store</h1>
+				<input class="new-book" placeholder="What are your favorite books?" autofocus>
+			</header>
+			<section class="main">
+				<input class="toggle-all" id="toggle-all" type="checkbox">
+				<label for="toggle-all">Mark all as read</label>
+				<ul class="books-list"></ul>
+			</section>
+			<footer class="footer"></footer>
+		</section>
+		<footer class="info">
+			<p>Double-click to edit a book</p>
+		</footer>
+		<script type="text/template" id="item-template">
+			<div class="view">
+				<input class="toggle" type="checkbox" <%= read ? 'checked' : '' %>>
+				<label><%- title %></label>
+				<button class="destroy"></button>
+			</div>
+			<input class="edit" value="<%- title %>">
+		</script>
+		<script type="text/template" id="stats-template">
+			<span class="books-count"><strong><%= remaining %></strong> <%= remaining === 1 ? 'item' : 'items' %> left</span>
+			<ul class="filters">
+				<li>
+					<a class="selected" href="#/">All</a>
+				</li>
+				<li>
+					<a href="#/active">Active</a>
+				</li>
+				<li>
+					<a href="#/read">Read</a>
+				</li>
+			</ul>
+			<% if (read) { %>
+			<button class="clear-read">Clear read</button>
+			<% } %>
+		</script>
+		<script src="node_modules/todomvc-common/base.js"></script>
+		<script src="node_modules/jquery/dist/jquery.js"></script>
+		<script src="node_modules/underscore/underscore.js"></script>
+		<script src="node_modules/backbone/backbone.js"></script>
+		<script src="node_modules/backbone.localstorage/backbone.localStorage.js"></script>
+		<script src="js/models/book.js"></script>
+		<script src="js/collections/books.js"></script>
+		<script src="js/view/book-view.js"></script>
+		<script src="js/view/app-view.js"></script>
+		<script src="js/routing/router.js"></script>
+		<script src="js/main.js"></script>
+	</body>
+</html>
