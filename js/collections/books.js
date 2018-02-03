@@ -13,7 +13,7 @@ var app = app || {};
 			return this.where({read: true});
 		},
 
-		remaining: function () {
+		remainingBooks: function () {
 			return this.where({read: false});
 		},
 

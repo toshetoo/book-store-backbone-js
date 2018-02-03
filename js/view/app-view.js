@@ -14,7 +14,7 @@ var app = app || {};
 		events: {
 			'keypress .new-book': 'createOnEnter',
 			'click .clear-read': 'clearRead',
-			'click .toggle-all': 'toggleAllComplete'
+			'click .toggle-all': 'markAllAsRead'
 		},
 
 		
@@ -25,9 +25,9 @@ var app = app || {};
 			this.$main = this.$('.main');
 			this.$list = $('.books-list');
 
-			this.listenTo(app.books, 'add', this.addOne);
+			this.listenTo(app.books, 'add', this.add);
 			this.listenTo(app.books, 'reset', this.addAll);
-			this.listenTo(app.books, 'change:read', this.filterOne);
+			this.listenTo(app.books, 'change:read', this.filter);
 			this.listenTo(app.books, 'filter', this.filterAll);
 			this.listenTo(app.books, 'all', _.debounce(this.render, 0));
 
@@ -40,7 +40,7 @@ var app = app || {};
 		// refreshing the statistics 
 		render: function () {
 			var read = app.books.read().length;
-			var remaining = app.books.remaining().length;
+			var remainingBooks = app.books.remainingBooks().length;
 
 			if (app.books.length) {
 				this.$main.show();
@@ -48,7 +48,7 @@ var app = app || {};
 
 				this.$footer.html(this.statsTemplate({
 					read: read,
-					remaining: remaining
+					remainingBooks: remainingBooks
 				}));
 
 				this.$('.filters li a')
@@ -60,28 +60,28 @@ var app = app || {};
 				this.$footer.hide();
 			}
 
-			this.allCheckbox.checked = !remaining;
+			this.allCheckbox.checked = !remainingBooks;
 		},
 
-		addOne: function (book) {
+		add: function (book) {
 			var view = new app.BookView({ model: book });
 			this.$list.append(view.render().el);
 		},
 
 		addAll: function () {
 			this.$list.html('');
-			app.books.each(this.addOne, this);
+			app.books.each(this.add, this);
 		},
 
-		filterOne: function (book) {
+		filter: function (book) {
 			book.trigger('visible');
 		},
 
 		filterAll: function () {
-			app.books.each(this.filterOne, this);
+			app.books.each(this.filter, this);
 		},
 
-		newAttributes: function () {
+		getNewBook: function () {
 			return {
 				title: this.$input.val().trim(),
 				order: app.books.nextOrder(),
@@ -91,7 +91,7 @@ var app = app || {};
 
 		createOnEnter: function (e) {
 			if (e.which === ENTER_KEY && this.$input.val().trim()) {
-				app.books.create(this.newAttributes());
+				app.books.create(this.getNewBook());
 				this.$input.val('');
 			}
 		},
@@ -101,7 +101,7 @@ var app = app || {};
 			return false;
 		},
 
-		toggleAllComplete: function () {
+		markAllAsRead: function () {
 			var read = this.allCheckbox.checked;
 
 			app.books.each(function (book) {

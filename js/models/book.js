@@ -9,7 +9,7 @@ var app = app || {};
 			read: false
 		},
 		
-		toggle: function () {
+		toggleReadState: function () {
 			this.save({
 				read: !this.get('read')
 			});

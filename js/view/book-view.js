@@ -46,7 +46,7 @@ var app = app || {};
 		},
 
 		toggleRead: function () {
-			this.model.toggle();
+			this.model.toggleReadState();
 		},
 
 		edit: function () {
